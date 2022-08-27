@@ -6,42 +6,45 @@ canvas.height = window.innerHeight;
 // return a object that with it can draw category deffirent shapes
 const c = canvas.getContext("2d");
 
-// factory function
+let x = 50;
+let y = 50;
+let r = 40;
+let xv = 7;
+let yv = 7;
 
-function drawCanvas() {
-    return {
-        // random color
-        randomColor: function () {
-            let letters = '0123456789ABCDEF';
-            let color = '#';
+function Color() {
 
-            for (let index = 0; index < 6; index++) {
-
-                color += letters[Math.floor(Math.random() * 16)]
-            }
-
-            return color;
-        },
-
-        projet1: function () {
-
-            setInterval(() => {
-
-                let x = Math.random() * window.innerWidth;
-                let y = Math.random() * window.innerHeight;
-                c.beginPath();
-                c.arc(x, y, 50, 0, 2 * Math.PI);
-                c.strokeStyle = this.randomColor();
-                c.stroke();
-
-            }, 600)
-
-
-        }
-
+    let letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let index = 0; index < 6; index++) {
+        color += letters[Math.floor(Math.random() * 16)]
     }
+
+    return color;
 }
 
-let re = drawCanvas();
+function animate() {
+    c.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    c.beginPath()
+    c.arc(x, y, r, 0, 2 * Math.PI);
+    c.fill();
+   
 
-re.projet1();
+    if (x+r > window.innerWidth || x-r < 0) {
+        xv = -xv;
+        c.fillStyle = Color();
+        c.fill();
+    }
+
+    if (y+r > window.innerHeight || y-r < 0) {
+        yv = -yv;
+        c.fillStyle = Color();
+        c.fill();
+    }
+
+    x += xv;
+    y += yv
+    requestAnimationFrame(animate);
+}
+
+animate();
